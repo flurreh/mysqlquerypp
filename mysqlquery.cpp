@@ -396,7 +396,7 @@ time_t MySQLQuery::getTime(const unsigned int &row, const unsigned int &field)
     return tValue;
 }
 
-time_t MySQLQuery::getTime(unsigned int row, const std::string &field)
+time_t MySQLQuery::getTime(const unsigned int &row, const std::string &field)
 {
     if(GetResultRowCount() < 1)
     {

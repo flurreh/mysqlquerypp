@@ -81,7 +81,7 @@ public:
     double getDouble(const unsigned int &row, const std::string &field);
     // gets a time value from the given row and field
     time_t getTime(const unsigned int &row, const unsigned int &field);
-    time_t getTime(unsigned int row, const std::string &field);
+    time_t getTime(const unsigned int &row, const std::string &field);
 
     // returns the result row count
     unsigned int GetResultRowCount();
