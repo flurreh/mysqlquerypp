@@ -22,7 +22,7 @@ MySQLConnection::~MySQLConnection()
     delete m_MySQLConn;
 }
 
-bool MySQLConnection::Connect(std::string sHostname, uint16_t wPort, std::string sUsername, std::string sPassword, std::string sDB = NULL)
+bool MySQLConnection::Connect(const std::string &sHostname, const uint16_t &wPort, const std::string &sUsername, const std::string &sPassword, const std::string &sDB = NULL)
 {
     // If we're already connected, we should close the first connection
     Disconnect();
@@ -66,7 +66,7 @@ void MySQLConnection::Disconnect()
 
 }
 
-bool MySQLConnection::SelectDB(std::string sSchemaName)
+bool MySQLConnection::SelectDB(const std::string &sSchemaName)
 {
     if(!m_bIsConnected)
     {
@@ -85,7 +85,7 @@ bool MySQLConnection::SelectDB(std::string sSchemaName)
     }
 }
 
-std::string MySQLConnection::GetLastError()
+const std::string MySQLConnection::GetLastError() const
 {
     if(!m_bIsConnected)
     {
@@ -106,7 +106,7 @@ bool MySQLConnection::IsConnected()
     return m_bIsConnected;
 }
 
-std::string MySQLConnection::EscapeString(std::string value)
+const std::string MySQLConnection::EscapeString(const std::string &value) const
 {
     if(!m_bIsConnected)
     {
@@ -114,13 +114,16 @@ std::string MySQLConnection::EscapeString(std::string value)
         return "";
     }
 
-    char *cValue = new char[value.length()+1];
+    char *cValue = new char[(value.length()*2)+1];
     mysql_real_escape_string(m_MySQLConn, cValue, value.c_str(), value.length());
 
-    return cValue;
+    std::string sRet = cValue;
+    delete [] cValue;
+
+    return sRet;
 }
 
-MySQLQuery::MySQLQuery(MySQLConnection *mConn, std::string sStatement)
+MySQLQuery::MySQLQuery(MySQLConnection *mConn, const std::string &sStatement)
 {
     m_sqlConn = mConn;
     m_sStatement = sStatement;
@@ -133,7 +136,7 @@ MySQLQuery::MySQLQuery(MySQLConnection *mConn, std::string sStatement)
     }
 }
 
-bool MySQLQuery::setString(unsigned int idx, std::string value)
+bool MySQLQuery::setString(const unsigned int &idx, const std::string &value)
 {
 
     if(idx > m_mArgMap.size())
@@ -150,7 +153,7 @@ bool MySQLQuery::setString(unsigned int idx, std::string value)
     return true;
 }
 
-bool MySQLQuery::setInt(unsigned int idx, int value)
+bool MySQLQuery::setInt(const unsigned int &idx, const int &value)
 {
     if(idx > m_mArgMap.size())
     {
@@ -165,7 +168,7 @@ bool MySQLQuery::setInt(unsigned int idx, int value)
     return true;
 }
 
-bool MySQLQuery::setDouble(unsigned int idx, double value)
+bool MySQLQuery::setDouble(const unsigned int &idx, const double &value)
 {
     if(idx > m_mArgMap.size())
     {
@@ -180,7 +183,7 @@ bool MySQLQuery::setDouble(unsigned int idx, double value)
     return true;
 }
 
-bool MySQLQuery::setTime(unsigned int idx, time_t value)
+bool MySQLQuery::setTime(const unsigned int &idx, const time_t &value)
 {
     if(idx > m_mArgMap.size())
     {
@@ -195,7 +198,7 @@ bool MySQLQuery::setTime(unsigned int idx, time_t value)
     return true;
 }
 
-bool MySQLQuery::setNull(unsigned int idx)
+bool MySQLQuery::setNull(const unsigned int &idx)
 {
     if(idx > m_mArgMap.size())
     {
@@ -207,7 +210,7 @@ bool MySQLQuery::setNull(unsigned int idx)
     return true;
 }
 
-std::string MySQLQuery::getFieldName(unsigned int field)
+const std::string MySQLQuery::getFieldName(const unsigned int &field)
 {
     if(field < 1)
     {
@@ -222,7 +225,7 @@ std::string MySQLQuery::getFieldName(unsigned int field)
     return sFieldName;
 }
 
-std::string MySQLQuery::getString(unsigned int row, unsigned int field)
+const std::string MySQLQuery::getString(const unsigned int &row, const unsigned int &field)
 {
     if(GetResultRowCount() < 1)
     {
@@ -246,7 +249,7 @@ std::string MySQLQuery::getString(unsigned int row, unsigned int field)
     return sValue;
 }
 
-std::string MySQLQuery::getString(unsigned int row, std::string field)
+const std::string MySQLQuery::getString(const unsigned int &row, const std::string &field)
 {
     if(GetResultRowCount() < 1)
     {
@@ -271,7 +274,7 @@ std::string MySQLQuery::getString(unsigned int row, std::string field)
     return sValue;
 }
 
-int MySQLQuery::getInt(unsigned int row, unsigned int field)
+int MySQLQuery::getInt(const unsigned int &row, const unsigned int &field)
 {
     if(GetResultRowCount() < 1)
     {
@@ -295,7 +298,7 @@ int MySQLQuery::getInt(unsigned int row, unsigned int field)
     return iValue;
 }
 
-int MySQLQuery::getInt(unsigned int row, std::string field)
+int MySQLQuery::getInt(const unsigned int &row, const std::string &field)
 {
     if(GetResultRowCount() < 1)
     {
@@ -320,7 +323,7 @@ int MySQLQuery::getInt(unsigned int row, std::string field)
     return iValue;
 }
 
-double MySQLQuery::getDouble(unsigned int row, unsigned int field)
+double MySQLQuery::getDouble(const unsigned int &row, const unsigned int &field)
 {
     if(GetResultRowCount() < 1)
     {
@@ -344,7 +347,7 @@ double MySQLQuery::getDouble(unsigned int row, unsigned int field)
     return dValue;
 }
 
-double MySQLQuery::getDouble(unsigned int row, std::string field)
+double MySQLQuery::getDouble(const unsigned int &row, const std::string &field)
 {
     if(GetResultRowCount() < 1)
     {
@@ -369,7 +372,7 @@ double MySQLQuery::getDouble(unsigned int row, std::string field)
     return dValue;
 }
 
-time_t MySQLQuery::getTime(unsigned int row, unsigned int field)
+time_t MySQLQuery::getTime(const unsigned int &row, const unsigned int &field)
 {
     if(GetResultRowCount() < 1)
     {
@@ -393,7 +396,7 @@ time_t MySQLQuery::getTime(unsigned int row, unsigned int field)
     return tValue;
 }
 
-time_t MySQLQuery::getTime(unsigned int row, std::string field)
+time_t MySQLQuery::getTime(unsigned int row, const std::string &field)
 {
     if(GetResultRowCount() < 1)
     {
@@ -421,17 +424,17 @@ time_t MySQLQuery::getTime(unsigned int row, std::string field)
 
 unsigned int MySQLQuery::GetResultRowCount()
 {
-    int iRowCount = m_mResultMap.size();
+    const int iRowCount = m_mResultMap.size();
     return iRowCount;
 }
 
 unsigned int MySQLQuery::GetFieldCount()
 {
-    int iFieldCount = m_mFieldMap.size();
+    const int iFieldCount = m_mFieldMap.size();
     return iFieldCount;
 }
 
-std::string MySQLQuery::BuildQueryString()
+const std::string MySQLQuery::BuildQueryString()
 {
     // replace each '?' with the corresponding value
     int iLastFoundPos = 0;

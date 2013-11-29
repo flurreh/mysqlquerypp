@@ -15,19 +15,19 @@ public:
     MySQLConnection();
     ~MySQLConnection();
     // connects to a MySQL-server
-    bool Connect(std::string sHostname, uint16_t wPort, std::string sUsername, std::string sPassword, std::string sDB);
+    bool Connect(const std::string &sHostname, const uint16_t &wPort, const std::string &sUsername, const std::string &sPassword, const std::string &sDB);
     // selects a DB
-    bool SelectDB(std::string sSchemaName);
+    bool SelectDB(const std::string &sSchemaName);
     // disconnects (huh, who guessed this?)
     void Disconnect();
     // returns the last error string
-    std::string GetLastError();
+    const std::string GetLastError() const;
     // gets a pointer to the MySQL connection
     MYSQL *getConn();
     // returns true when connected
     bool IsConnected();
     // returns an escaped string
-    std::string EscapeString(std::string value);
+    const std::string EscapeString(const std::string &value) const;
 
 private:
     MYSQL *m_MySQLConn;
@@ -44,19 +44,19 @@ class MySQLQuery
 
 public:
 
-    MySQLQuery(MySQLConnection *mConn, std::string sStatement);
+    MySQLQuery(MySQLConnection *mConn, const std::string &sStatement);
     ~MySQLQuery();
 
     // sets the value of idx to a given string (also adds quotation marks and escapes the string)
-    bool setString(unsigned int idx, std::string value);
+    bool setString(const unsigned int &idx, const std::string &value);
     // sets the value of idx to a given int
-    bool setInt(unsigned int idx, int value);
+    bool setInt(const unsigned int &idx, const int &value);
     // sets the value of idx to a given double
-    bool setDouble(unsigned int idx, double value);
+    bool setDouble(const unsigned int &idx, const double &value);
     // sets the value of idx to a given time_t
-    bool setTime(unsigned int idx, time_t value);
+    bool setTime(const unsigned int &idx, const time_t &value);
     // sets the value of idx to NULL
-    bool setNull(unsigned int idx);
+    bool setNull(const unsigned int &idx);
 
     // executes a SELECT-statement
     bool ExecuteQuery();
@@ -66,22 +66,22 @@ public:
     int ExecuteInsert();
 
     // builds the query string with filled-in arguments and returns it
-    std::string BuildQueryString();
+    const std::string BuildQueryString();
 
     // returns a field name
-    std::string getFieldName(unsigned int field);
+    const std::string getFieldName(const unsigned int &field);
     // gets a string value from the given row and field
-    std::string getString(unsigned int row, unsigned int field);
-    std::string getString(unsigned int row, std::string field);
+    const std::string getString(const unsigned int &row, const unsigned int &field);
+    const std::string getString(const unsigned int &row, const std::string &field);
     // gets an int value from the given row and field
-    int getInt(unsigned int row, unsigned int field);
-    int getInt(unsigned int row, std::string field);
+    int getInt(const unsigned int &row, const unsigned int &field);
+    int getInt(const unsigned int &row, const std::string &field);
     // gets a double value from the given row and field
-    double getDouble(unsigned int row, unsigned int field);
-    double getDouble(unsigned int row, std::string field);
+    double getDouble(const unsigned int &row, const unsigned int &field);
+    double getDouble(const unsigned int &row, const std::string &field);
     // gets a time value from the given row and field
-    time_t getTime(unsigned int row, unsigned int field);
-    time_t getTime(unsigned int row, std::string field);
+    time_t getTime(const unsigned int &row, const unsigned int &field);
+    time_t getTime(unsigned int row, const std::string &field);
 
     // returns the result row count
     unsigned int GetResultRowCount();
