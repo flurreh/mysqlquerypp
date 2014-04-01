@@ -18,8 +18,6 @@ MySQLConnection::~MySQLConnection()
         std::clog << "Closing MySQL Connection" << std::endl;
         mysql_close(m_MySQLConn);
     }
-
-    delete m_MySQLConn;
 }
 
 bool MySQLConnection::Connect(const std::string &sHostname, const uint16_t &wPort, const std::string &sUsername, const std::string &sPassword, const std::string &sDB = NULL)
