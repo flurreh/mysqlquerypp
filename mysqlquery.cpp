@@ -134,6 +134,10 @@ MySQLQuery::MySQLQuery(MySQLConnection *mConn, const std::string &sStatement)
     }
 }
 
+MySQLQuery::~MySQLQuery() {
+    
+}
+
 bool MySQLQuery::setString(const unsigned int &idx, const std::string &value)
 {
 
